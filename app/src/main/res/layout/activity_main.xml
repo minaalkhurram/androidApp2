@@ -13,22 +13,42 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-    <EditText
-        android:id="@+id/searchTxt"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/cyan"
-        android:fontFamily="sans-serif-thin"
-        android:gravity="center_vertical"
-        android:hint="Search"
-        android:paddingLeft="20dp"
-        android:drawablePadding="15dp"
-        android:drawableStart="@drawable/searchicon"
-        android:textSize="16sp"
-        android:typeface="monospace">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/cyan">
 
 
-    </EditText>
+        <EditText
+            android:id="@+id/searchTxt"
+            android:layout_width="315dp"
+            android:layout_height="40dp"
+            android:background="@color/cyan"
+            android:drawableStart="@drawable/searchicon"
+            android:drawablePadding="15dp"
+            android:fontFamily="sans-serif-thin"
+            android:gravity="center_vertical"
+            android:hint="Search"
+            android:paddingLeft="20dp"
+            android:textSize="16sp"
+            android:typeface="monospace">
+
+
+        </EditText>
+
+        <Button
+            android:id="@+id/fltrbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:backgroundTint="@color/black"
+            android:text="filter"
+            android:textSize="8sp">
+
+        </Button>
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
@@ -42,12 +62,14 @@
         android:typeface="monospace">
 
     </TextView>
+
     <Button
+        android:id="@+id/addBtn"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_gravity="bottom"
         android:background="@color/darkPrimary"
-        android:text="Add com.example.aasignment2.Restaurant "
-        android:layout_gravity="bottom">
+        android:text="Add">
 
     </Button>
 
