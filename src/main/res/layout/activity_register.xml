@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".register">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/cyan"
+        android:fontFamily="monospace"
+        android:paddingTop="15dp"
+
+        android:text="Registiration"
+        android:textAlignment="center"
+        android:textSize="34sp"
+        android:typeface="monospace">
+
+    </TextView>
+
+    <EditText
+        android:id="@+id/nameTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:hint="Enter Restaurant name">
+
+    </EditText>
+
+
+    <EditText
+        android:id="@+id/locTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Enter Location ">
+
+    </EditText>
+
+
+    <EditText
+        android:id="@+id/phoneTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:inputType="number"
+        android:hint="Enter Phone Number">
+
+    </EditText>
+
+
+    <EditText
+        android:id="@+id/descTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:hint="Enter Description">
+
+    </EditText>
+
+
+    <EditText
+        android:id="@+id/ratingTxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:inputType="number"
+        android:hint="Enter Rating">
+
+    </EditText>
+
+    <Button
+        android:id="@+id/registerBtn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="30dp"
+        android:text="Submit">
+
+    </Button>
+</LinearLayout>
