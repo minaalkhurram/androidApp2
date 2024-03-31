@@ -20,22 +20,32 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RestaurantAdapter adapter;
     Button addButton,filterbtn ;
 
+    private static final int REQUEST_CODE_REGISTER_ACTIVITY = 1;
+
     EditText searchtxt;
+    Context context=this;
     public ArrayList<Restaurant> restaurantList;
     private SharedPreferences sharedPreferences;
+    private static final String PREF_NAME = "restaurant_preferences";
+    private static final String KEY_RESTAURANTS = "restaurants";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+
+
         init();
 
         recyclerView=findViewById(R.id.recyclerview);
@@ -58,22 +68,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this,register.class);
-                startActivity(intent);
 
-                sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                String name = sharedPreferences.getString("name", "");
-                String location = sharedPreferences.getString("location", "");
-                String phone = sharedPreferences.getString("phone", "");
-                String description = sharedPreferences.getString("description", "");
-
-
-                Restaurant newRestaurant = new Restaurant(name, location, phone, description,0);
-
-
-                restaurantList.add(newRestaurant);
-                adapter.notifyDataSetChanged();
-
-
+                startActivityForResult(intent, REQUEST_CODE_REGISTER_ACTIVITY);
 
 
             }
@@ -99,16 +95,86 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE_REGISTER_ACTIVITY) {
+            updateDataSet();
+        }
+    }
 
     private void addSampleData() {
         // Add sample restaurants to the list
-        restaurantList.add(new Restaurant("The Wok", "Location 1", "1234567890", "Chinese food ",4));
-        restaurantList.add(new Restaurant("Mandarin Kitchen", "Location 2", "0987654321", "Chinese foodt ",3.5f));
-        restaurantList.add(new Restaurant("Pizza Hut", "Location 3", "4561237890", "Fresh Pizza!!",4.5f));
-        restaurantList.add(new Restaurant("Bundu Khan", "Location 4", "9876543210", "Desi food cravings ",2));
-        restaurantList.add(new Restaurant("Sollis ", "Location 5", "6549873210", "Italian pizza ",3));
-        restaurantList.add(new Restaurant("Third Culture ", "Location 6", "3216549870", "Best coffee in town ",5));
+        restaurantList=getRestaurants(this);
+      //  saveRestaurants(this,restaurantList);
     }
+
+    private void updateDataSet() {
+        // Retrieve data from SharedPreferences
+        sharedPreferences = getSharedPreferences("Prefs_new", MODE_PRIVATE);
+        String name = sharedPreferences.getString("name", "");
+        String location = sharedPreferences.getString("location", "");
+        String phone = sharedPreferences.getString("phone", "");
+        String description = sharedPreferences.getString("description", "");
+        String rating=sharedPreferences.getString("ratings","");
+
+
+
+        // Create new Restaurant object and add to list
+        Restaurant newRestaurant = new Restaurant(name, location, phone, description,  Float.parseFloat(rating));
+        restaurantList.add(newRestaurant);
+
+        // Notify adapter of dataset change
+        adapter.notifyDataSetChanged();
+
+        // Save updated restaurants list
+        saveRestaurants(context, restaurantList);
+    }
+
+    public static void saveRestaurants(Context context, List<Restaurant> restaurants) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        Set<String> restaurantSet = new HashSet<>();
+        for (Restaurant restaurant : restaurants) {
+            String restaurantString = restaurant.getName() + "," +
+                    restaurant.getLoc() + "," +
+                    restaurant.getPhone() + "," +
+                    restaurant.getDesc() + "," +
+                    restaurant.getRatings();
+            restaurantSet.add(restaurantString);
+        }
+
+        editor.putStringSet(KEY_RESTAURANTS, restaurantSet);
+        editor.apply();
+    }
+
+
+    public static ArrayList<Restaurant> getRestaurants(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        Set<String> restaurantSet = sharedPreferences.getStringSet(KEY_RESTAURANTS, null);
+
+        ArrayList<Restaurant> restaurants = new ArrayList<>();
+        if (restaurantSet != null) {
+            for (String restaurantString : restaurantSet) {
+                String[] restaurantData = restaurantString.split(",");
+                if (restaurantData.length == 5) {
+                    String name = restaurantData[0];
+                    String location = restaurantData[1];
+                    String phone = restaurantData[2];
+                    String description = restaurantData[3];
+                    float rating = Float.parseFloat(restaurantData[4]);
+
+                    Restaurant restaurant = new Restaurant(name, location, phone, description, rating);
+                    restaurants.add(restaurant);
+                }
+            }
+        }
+
+        return restaurants;
+    }
+
 
     public void init()
     {
